@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { randomAuthId } from "./utils/helpers";
+import { validateParams, randomAuthId } from "./utils/helpers";
 import { createSignature, createStackingClient } from "./utils/signature";
 import dotenv from "dotenv";
 const app = express();
@@ -23,7 +23,7 @@ app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
 });
 
-app.post("/get-signature", (req, res) => {
+app.post("/get-signature", async (req, res) => {
   console.log(req.body);
   const { rewardCycle, poxAddress, maxAmount, period, topic } = req.body;
   const signerPrivateKey = process.env.SIGNER_PRV_KEY;
@@ -52,6 +52,23 @@ app.post("/get-signature", (req, res) => {
     res.status(400).json({ message: "Invalid Internal Info" });
     return;
   }
+
+  let [valid, message] = await validateParams(
+    poxAddress,
+    topic,
+    rewardCycle,
+    maxAmount,
+    period,
+    stackingClient
+  );
+
+  console.log("\n\n", valid, message, "\n\n");
+
+  if (!valid) {
+    res.status(400).json({ message });
+    return;
+  }
+
   const signature = createSignature(
     stackingClient,
     topic,
@@ -62,6 +79,7 @@ app.post("/get-signature", (req, res) => {
     maxAmount,
     authId
   );
+
   console.log(
     "Received data:",
     rewardCycle,
@@ -71,6 +89,7 @@ app.post("/get-signature", (req, res) => {
     topic,
     authId
   );
+
   console.log("Signature:", signature);
 
   res.status(200).json({
