@@ -1,13 +1,13 @@
-import express from "express";
-import cors from "cors";
-import { validateParams, randomAuthId } from "./utils/helpers";
-import { createSignature, createStackingClient } from "./utils/signature";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import { validateParams, randomAuthId } from './utils/helpers';
+import { createSignature, createStackingClient } from './utils/signature';
+import dotenv from 'dotenv';
 const app = express();
 const port = 8080;
 dotenv.config();
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
 app.use(
   cors({
     origin: allowedOrigins,
@@ -15,15 +15,15 @@ app.use(
 );
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello, signer!");
+app.get('/', (req, res) => {
+  res.send('Hello, signer!');
 });
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
 });
 
-app.post("/get-signature", async (req, res) => {
+app.post('/get-signature', async (req, res) => {
   console.log(req.body);
   const { rewardCycle, poxAddress, maxAmount, period, topic } = req.body;
   const signerPrivateKey = process.env.SIGNER_PRV_KEY;
@@ -33,12 +33,12 @@ app.post("/get-signature", async (req, res) => {
 
   if (!signerPrivateKey || !signerAddress || !network) {
     console.error(
-      "Invalid Signer Data:",
+      'Invalid Signer Data:',
       signerPrivateKey,
       signerAddress,
       network
     );
-    res.status(400).json({ message: "Invalid Signer Data" });
+    res.status(400).json({ message: 'Invalid Signer Data' });
     return;
   }
 
@@ -49,11 +49,11 @@ app.post("/get-signature", async (req, res) => {
   );
 
   if (!stackingClient) {
-    res.status(400).json({ message: "Invalid Internal Info" });
+    res.status(400).json({ message: 'Invalid Internal Info' });
     return;
   }
 
-  let [valid, message] = await validateParams(
+  const [valid, message] = await validateParams(
     poxAddress,
     topic,
     rewardCycle,
@@ -62,7 +62,7 @@ app.post("/get-signature", async (req, res) => {
     stackingClient
   );
 
-  console.log("\n\n", valid, message, "\n\n");
+  console.log('\n\n', valid, message, '\n\n');
 
   if (!valid) {
     res.status(400).json({ message });
@@ -81,7 +81,7 @@ app.post("/get-signature", async (req, res) => {
   );
 
   console.log(
-    "Received data:",
+    'Received data:',
     rewardCycle,
     poxAddress,
     maxAmount,
@@ -90,7 +90,7 @@ app.post("/get-signature", async (req, res) => {
     authId
   );
 
-  console.log("Signature:", signature);
+  console.log('Signature:', signature);
 
   res.status(200).json({
     signature,

@@ -1,12 +1,12 @@
-import { StackingClient } from "@stacks/stacking";
-import validate from "bitcoin-address-validation";
+import { StackingClient } from '@stacks/stacking';
+import validate from 'bitcoin-address-validation';
 
 const TopicMapping: string[] = [
-  "stack-stx",
-  "stack-extend",
-  "stack-increase",
-  "stack-aggregation-commit",
-  "stack-aggregation-increase",
+  'stack-stx',
+  'stack-extend',
+  'stack-increase',
+  'stack-aggregation-commit',
+  'stack-aggregation-increase',
 ];
 
 export const randomAuthId = () => {
@@ -21,7 +21,7 @@ export const validateParams = async (
   period: number,
   stackingClient: StackingClient
 ) => {
-  let currentRewardCycle = await getPoxRewardCycle(stackingClient);
+  const currentRewardCycle = await getPoxRewardCycle(stackingClient);
 
   if (!validate(poxAddress))
     return [false, SigFormErrorMessages.InvalidPoxAddress(poxAddress)];
@@ -44,18 +44,18 @@ export const validateParams = async (
 
   if (!periodValid) return [false, periodMessage];
 
-  return [true, "OK"];
+  return [true, 'OK'];
 };
 
 export const SigFormErrorMessages = {
-  EmptyRewardCycle: "Please add the reward cycle.",
-  PastRewCycle: "Past reward cycles are not permitted.",
-  AggFutureCycle: "For the selected topic you must insert a future cycle.",
-  WrongTopic: "Please select a valid topic.",
-  EmptyPeriod: "Please add the period.",
+  EmptyRewardCycle: 'Please add the reward cycle.',
+  PastRewCycle: 'Past reward cycles are not permitted.',
+  AggFutureCycle: 'For the selected topic you must insert a future cycle.',
+  WrongTopic: 'Please select a valid topic.',
+  EmptyPeriod: 'Please add the period.',
   NegativeOrZeroPeriod:
-    "Period should be greater than 0 for the selected topic.",
-  PeriodExceedsMaximum: "The maximum period for stacking operations is 12.",
+    'Period should be greater than 0 for the selected topic.',
+  PeriodExceedsMaximum: 'The maximum period for stacking operations is 12.',
   AggCommitWrongPeriod: (topic: string) =>
     `The period for ${topic} signature should be 1.`,
   InvalidPoxAddress: (poxAddress: string) =>
@@ -92,7 +92,7 @@ export const testRewardCycle = (
           false,
           SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
         ];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[1]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
@@ -104,7 +104,7 @@ export const testRewardCycle = (
           false,
           SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
         ];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[2]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
@@ -116,21 +116,21 @@ export const testRewardCycle = (
           false,
           SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
         ];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[3]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
         return [false, SigFormErrorMessages.AggFutureCycle];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[4]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
         return [false, SigFormErrorMessages.AggFutureCycle];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
   };
 
@@ -164,7 +164,7 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.NegativeOrZeroPeriod];
       if (selectedPeriod > 12)
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[1]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
@@ -173,7 +173,7 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.NegativeOrZeroPeriod];
       if (selectedPeriod > 12)
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[2]]: (): [boolean, string] => {
       // TODO: Should be equal to current lock period!
@@ -183,21 +183,21 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.NegativeOrZeroPeriod];
       if (selectedPeriod > 12)
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[3]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)
         return [false, SigFormErrorMessages.AggCommitWrongPeriod(topic)];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
     [TopicMapping[4]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)
         return [false, SigFormErrorMessages.AggCommitWrongPeriod(topic)];
-      return [true, "OK"];
+      return [true, 'OK'];
     },
   };
 

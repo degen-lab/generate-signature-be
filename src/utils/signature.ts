@@ -1,6 +1,6 @@
-import { Pox4SignatureTopic, StackingClient } from "@stacks/stacking";
-import { StacksTestnet, StacksMainnet } from "@stacks/network";
-import { createStacksPrivateKey } from "@stacks/transactions";
+import { Pox4SignatureTopic, StackingClient } from '@stacks/stacking';
+import { StacksTestnet, StacksMainnet } from '@stacks/network';
+import { createStacksPrivateKey } from '@stacks/transactions';
 
 export const createStackingClient = (
   address: string | undefined,
@@ -10,7 +10,7 @@ export const createStackingClient = (
     return undefined;
   }
   const stacksNetwork =
-    network?.toLowerCase() === "testnet"
+    network?.toLowerCase() === 'testnet'
       ? new StacksTestnet()
       : new StacksMainnet();
   return new StackingClient(address as string, stacksNetwork);
