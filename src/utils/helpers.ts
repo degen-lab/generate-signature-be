@@ -19,7 +19,7 @@ export const validateParams = async (
   selectedRewardCycle: number | undefined,
   maxAmount: number,
   period: number,
-  stackingClient: StackingClient,
+  stackingClient: StackingClient
 ) => {
   let currentRewardCycle = await getPoxRewardCycle(stackingClient);
 
@@ -45,7 +45,7 @@ export const validateParams = async (
   if (!periodValid) return [false, periodMessage];
 
   return [true, "OK"];
-}
+};
 
 export const SigFormErrorMessages = {
   EmptyRewardCycle: "Please add the reward cycle.",
@@ -58,9 +58,13 @@ export const SigFormErrorMessages = {
   PeriodExceedsMaximum: "The maximum period for stacking operations is 12.",
   AggCommitWrongPeriod: (topic: string) =>
     `The period for ${topic} signature should be 1.`,
-  InvalidPoxAddress: (poxAddress: string) => `Invalid PoX Address: ${poxAddress}.`,
+  InvalidPoxAddress: (poxAddress: string) =>
+    `Invalid PoX Address: ${poxAddress}.`,
   InvalidTopic: (topic: string) => `Invalid Topic: ${topic}.`,
-  MaxAmountTooBig: (maxAmount: number) => `Max amount too big (${maxAmount} > ${Number.MAX_SAFE_INTEGER}).`
+  MaxAmountTooBig: (maxAmount: number) =>
+    `Max amount too big (${maxAmount} > ${Number.MAX_SAFE_INTEGER}).`,
+  RewCycleGreaterThanCurrent: (currentRewardCycle: number) =>
+    `The reward cycle is greater than the current one (${currentRewardCycle}).`,
 };
 
 /**
@@ -78,37 +82,50 @@ export const testRewardCycle = (
     string,
     (selectedRewardCycle: number) => [boolean, string]
   > = {
-    [TopicMapping[0]]: (
-      selectedRewardCycle: number
-    ): [boolean, string] => {
+    [TopicMapping[0]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
         return [false, SigFormErrorMessages.PastRewCycle];
+      if (selectedRewardCycle > currentRewardCycle)
+        return [
+          false,
+          SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
+        ];
       return [true, "OK"];
     },
-    [TopicMapping[1]]: (
-      selectedRewardCycle: number
-    ): [boolean, string] => {
+    [TopicMapping[1]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
         return [false, SigFormErrorMessages.PastRewCycle];
+      if (selectedRewardCycle > currentRewardCycle)
+        return [
+          false,
+          SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
+        ];
       return [true, "OK"];
     },
-    [TopicMapping[2]]: (): [boolean, string] => [true, "OK"],
-    [TopicMapping[3]]: (
-      selectedRewardCycle: number
-    ): [boolean, string] => {
+    [TopicMapping[2]]: (selectedRewardCycle: number): [boolean, string] => {
+      if (!selectedRewardCycle)
+        return [false, SigFormErrorMessages.EmptyRewardCycle];
+      if (selectedRewardCycle < currentRewardCycle)
+        return [false, SigFormErrorMessages.PastRewCycle];
+      if (selectedRewardCycle > currentRewardCycle)
+        return [
+          false,
+          SigFormErrorMessages.RewCycleGreaterThanCurrent(currentRewardCycle),
+        ];
+      return [true, "OK"];
+    },
+    [TopicMapping[3]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
         return [false, SigFormErrorMessages.AggFutureCycle];
       return [true, "OK"];
     },
-    [TopicMapping[4]]: (
-      selectedRewardCycle: number
-    ): [boolean, string] => {
+    [TopicMapping[4]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
