@@ -1,7 +1,7 @@
 import { StackingClient } from '@stacks/stacking';
 import validate from 'bitcoin-address-validation';
 
-const TopicMapping: string[] = [
+const TopicList: string[] = [
   'stack-stx',
   'stack-extend',
   'stack-increase',
@@ -26,7 +26,7 @@ export const validateParams = async (
   if (!validate(poxAddress))
     return [false, SigFormErrorMessages.InvalidPoxAddress(poxAddress)];
 
-  if (!TopicMapping.includes(topic))
+  if (!TopicList.includes(topic))
     return [false, SigFormErrorMessages.InvalidTopic(topic)];
 
   if (maxAmount > Number.MAX_SAFE_INTEGER)
@@ -82,7 +82,7 @@ export const testRewardCycle = (
     string,
     (selectedRewardCycle: number) => [boolean, string]
   > = {
-    [TopicMapping[0]]: (selectedRewardCycle: number): [boolean, string] => {
+    [TopicList[0]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -94,7 +94,7 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[1]]: (selectedRewardCycle: number): [boolean, string] => {
+    [TopicList[1]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -106,7 +106,7 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[2]]: (selectedRewardCycle: number): [boolean, string] => {
+    [TopicList[2]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -118,14 +118,14 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[3]]: (selectedRewardCycle: number): [boolean, string] => {
+    [TopicList[3]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
         return [false, SigFormErrorMessages.AggFutureCycle];
       return [true, 'OK'];
     },
-    [TopicMapping[4]]: (selectedRewardCycle: number): [boolean, string] => {
+    [TopicList[4]]: (selectedRewardCycle: number): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
@@ -157,7 +157,7 @@ export const testPeriod = (
     string,
     (selectedRewardCycle: number) => [boolean, string]
   > = {
-    [TopicMapping[0]]: (selectedPeriod: number): [boolean, string] => {
+    [TopicList[0]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod < 1)
@@ -166,7 +166,7 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[1]]: (selectedPeriod: number): [boolean, string] => {
+    [TopicList[1]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod < 1)
@@ -175,7 +175,7 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[2]]: (): [boolean, string] => {
+    [TopicList[2]]: (): [boolean, string] => {
       // TODO: Should be equal to current lock period!
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
@@ -185,14 +185,14 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[3]]: (selectedPeriod: number): [boolean, string] => {
+    [TopicList[3]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)
         return [false, SigFormErrorMessages.AggCommitWrongPeriod(topic)];
       return [true, 'OK'];
     },
-    [TopicMapping[4]]: (selectedPeriod: number): [boolean, string] => {
+    [TopicList[4]]: (selectedPeriod: number): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)

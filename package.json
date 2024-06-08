@@ -20,6 +20,8 @@
     "@stacks/stacking": "^6.15.0",
     "@stacks/transactions": "^6.15.0",
     "bitcoin-address-validation": "^2.2.3",
+    "bitcoinjs-lib": "^6.1.5",
+    "bs58check": "^3.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
