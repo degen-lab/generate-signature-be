@@ -76,7 +76,7 @@ app.post('/get-signature', async (req, res) => {
     rewardCycle,
     period,
     signerPrivateKey,
-    maxAmount,
+    maxAmount * 1_000_000,
     authId
   );
 
@@ -84,7 +84,7 @@ app.post('/get-signature', async (req, res) => {
     'Received data:',
     rewardCycle,
     poxAddress,
-    maxAmount,
+    `maxAmount (in uSTX): ${maxAmount * 1_000_000}`,
     period,
     topic,
     authId
