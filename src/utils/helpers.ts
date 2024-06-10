@@ -1,13 +1,13 @@
-import { StackingClient } from '@stacks/stacking';
+import { Pox4SignatureTopic, StackingClient } from '@stacks/stacking';
 import validate from 'bitcoin-address-validation';
 
-const TopicMapping: string[] = [
-  'stack-stx',
-  'stack-extend',
-  'stack-increase',
-  'stack-aggregation-commit',
-  'stack-aggregation-increase',
-];
+export const methodToPox4Topic: Record<string, Pox4SignatureTopic> = {
+  'stack-stx': Pox4SignatureTopic.StackStx,
+  'stack-extend': Pox4SignatureTopic.StackExtend,
+  'stack-increase': Pox4SignatureTopic.StackIncrease,
+  'stack-aggregation-commit': Pox4SignatureTopic.AggregateCommit,
+  'stack-aggregation-increase': Pox4SignatureTopic.AggregateIncrease,
+};
 
 export const randomAuthId = () => {
   return Date.now();
@@ -15,7 +15,7 @@ export const randomAuthId = () => {
 
 export const validateParams = async (
   poxAddress: string,
-  topic: string,
+  topic: Pox4SignatureTopic,
   selectedRewardCycle: number | undefined,
   maxAmount: number,
   period: number,
@@ -25,9 +25,6 @@ export const validateParams = async (
 
   if (!validate(poxAddress))
     return [false, SigFormErrorMessages.InvalidPoxAddress(poxAddress)];
-
-  if (!TopicMapping.includes(topic))
-    return [false, SigFormErrorMessages.InvalidTopic(topic)];
 
   if (maxAmount > Number.MAX_SAFE_INTEGER)
     return [false, SigFormErrorMessages.MaxAmountTooBig(maxAmount)];
@@ -82,7 +79,9 @@ export const testRewardCycle = (
     string,
     (selectedRewardCycle: number) => [boolean, string]
   > = {
-    [TopicMapping[0]]: (selectedRewardCycle: number): [boolean, string] => {
+    [Pox4SignatureTopic.StackStx]: (
+      selectedRewardCycle: number
+    ): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -94,7 +93,9 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[1]]: (selectedRewardCycle: number): [boolean, string] => {
+    [Pox4SignatureTopic.StackExtend]: (
+      selectedRewardCycle: number
+    ): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -106,7 +107,9 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[2]]: (selectedRewardCycle: number): [boolean, string] => {
+    [Pox4SignatureTopic.StackIncrease]: (
+      selectedRewardCycle: number
+    ): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle < currentRewardCycle)
@@ -118,14 +121,18 @@ export const testRewardCycle = (
         ];
       return [true, 'OK'];
     },
-    [TopicMapping[3]]: (selectedRewardCycle: number): [boolean, string] => {
+    [Pox4SignatureTopic.AggregateCommit]: (
+      selectedRewardCycle: number
+    ): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
         return [false, SigFormErrorMessages.AggFutureCycle];
       return [true, 'OK'];
     },
-    [TopicMapping[4]]: (selectedRewardCycle: number): [boolean, string] => {
+    [Pox4SignatureTopic.AggregateIncrease]: (
+      selectedRewardCycle: number
+    ): [boolean, string] => {
       if (!selectedRewardCycle)
         return [false, SigFormErrorMessages.EmptyRewardCycle];
       if (selectedRewardCycle <= currentRewardCycle)
@@ -157,7 +164,9 @@ export const testPeriod = (
     string,
     (selectedRewardCycle: number) => [boolean, string]
   > = {
-    [TopicMapping[0]]: (selectedPeriod: number): [boolean, string] => {
+    [Pox4SignatureTopic.StackStx]: (
+      selectedPeriod: number
+    ): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod < 1)
@@ -166,7 +175,9 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[1]]: (selectedPeriod: number): [boolean, string] => {
+    [Pox4SignatureTopic.StackExtend]: (
+      selectedPeriod: number
+    ): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod < 1)
@@ -175,7 +186,7 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[2]]: (): [boolean, string] => {
+    [Pox4SignatureTopic.StackIncrease]: (): [boolean, string] => {
       // TODO: Should be equal to current lock period!
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
@@ -185,14 +196,18 @@ export const testPeriod = (
         return [false, SigFormErrorMessages.PeriodExceedsMaximum];
       return [true, 'OK'];
     },
-    [TopicMapping[3]]: (selectedPeriod: number): [boolean, string] => {
+    [Pox4SignatureTopic.AggregateCommit]: (
+      selectedPeriod: number
+    ): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)
         return [false, SigFormErrorMessages.AggCommitWrongPeriod(topic)];
       return [true, 'OK'];
     },
-    [TopicMapping[4]]: (selectedPeriod: number): [boolean, string] => {
+    [Pox4SignatureTopic.AggregateIncrease]: (
+      selectedPeriod: number
+    ): [boolean, string] => {
       if (selectedPeriod === undefined)
         return [false, SigFormErrorMessages.EmptyPeriod];
       if (selectedPeriod !== 1)

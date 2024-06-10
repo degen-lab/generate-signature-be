@@ -3,7 +3,7 @@ import { createSignature, createStackingClient } from '../utils/signature';
 import { getPoxRewardCycle, randomAuthId } from '../utils/helpers';
 import { Pox4SignatureTopic, StackingClient } from '@stacks/stacking';
 
-export const topicOptions = [
+const topicOptions = [
   'stack-stx',
   'stack-extend',
   'stack-increase',
@@ -54,8 +54,6 @@ describe('Signature generation', () => {
             maxAmount,
             authId
           );
-
-          // console.log(signature);
 
           // Assert
           expect(true).toBe(true);
