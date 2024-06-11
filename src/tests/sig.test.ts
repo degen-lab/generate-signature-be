@@ -1,7 +1,5 @@
 import fc from 'fast-check';
-import {
-  createStackingClient,
-} from '../utils/signature';
+import { createStackingClient } from '../utils/signature';
 import {
   SigFormErrorMessages,
   getPoxRewardCycle,
@@ -22,7 +20,7 @@ import {
 import { Cl, callReadOnlyFunction } from '@stacks/transactions';
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
 
-export const topicOptions = [
+const topicOptions = [
   'stack-stx',
   'stack-extend',
   'stack-increase',
@@ -41,9 +39,9 @@ const TopicList: string[] = [
 fc.configureGlobal({ numRuns: 5, endOnFailure: true });
 let stackingClientMainnet: StackingClient | undefined;
 let stackingClientTestnet: StackingClient | undefined;
-let prvKey =
+const prvKey =
   'b41c2a9e65247e73a690dbef18622c04cfa1df276bb65ee77ed73cc876e3e77b01';
-let pubKey =
+const pubKey =
   '02778d476704afa540ac01438f62c371dc38741b00f35fb895e5cd48d070ebab41';
 
 const btcAddresses: string[] = [
@@ -88,7 +86,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(...topicOptions),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -134,7 +132,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(...topicOptions),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -181,7 +179,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0], topicOptions[1], topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -233,7 +231,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0], topicOptions[1], topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -286,7 +284,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.constant(1),
@@ -338,7 +336,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.constant(1),
@@ -391,7 +389,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.constant(1),
@@ -443,7 +441,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.constant(1),
@@ -496,7 +494,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 13 }),
@@ -504,7 +502,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -531,7 +528,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 13 }),
@@ -539,7 +536,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -566,7 +562,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ max: 0 }),
@@ -574,7 +570,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -601,7 +596,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ max: 0 }),
@@ -609,7 +604,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -636,7 +630,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -644,7 +638,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -671,7 +664,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -679,7 +672,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -706,7 +698,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet + 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -714,7 +706,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -741,7 +732,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[0]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet + 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -749,7 +740,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -782,7 +772,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -815,7 +804,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -842,7 +830,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 13 }),
@@ -850,7 +838,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -877,7 +864,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 13 }),
@@ -885,7 +872,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -912,7 +898,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ max: 0 }),
@@ -920,7 +906,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -947,7 +932,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ max: 0 }),
@@ -955,7 +940,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -982,7 +966,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -990,7 +974,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1017,7 +1000,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -1025,7 +1008,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1052,7 +1034,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet + 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -1060,7 +1042,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1087,7 +1068,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[1]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet + 1);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -1095,7 +1076,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1128,7 +1108,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1161,7 +1140,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1188,7 +1166,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 13 }),
@@ -1196,7 +1174,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1223,7 +1200,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 13 }),
@@ -1231,7 +1208,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1258,7 +1234,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ max: 0 }),
@@ -1266,7 +1242,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1293,7 +1268,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ max: 0 }),
@@ -1301,7 +1276,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1328,7 +1302,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -1336,7 +1310,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1363,7 +1336,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet - 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -1371,7 +1344,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1398,7 +1370,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet + 1);
         }),
         fc.integer({ min: 0, max: 12 }),
@@ -1406,7 +1378,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1433,7 +1404,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[2]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet + 1);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -1441,7 +1412,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1474,7 +1444,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1507,7 +1476,6 @@ describe('Signature generation', () => {
         async (topic, poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientTestnet).toBeDefined();
-          const authId = randomAuthId();
 
           // Act
           const message = await validateParams(
@@ -1534,7 +1502,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet + 1);
         }),
         fc.integer().filter((n) => n !== 1),
@@ -1568,7 +1536,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet + 1);
         }),
         fc.integer().filter((n) => n !== 1),
@@ -1602,7 +1570,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.constant(1),
@@ -1636,7 +1604,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[3]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.constant(1),
@@ -1734,7 +1702,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet + 1);
         }),
         fc.integer().filter((n) => n !== 1),
@@ -1768,7 +1736,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet + 1);
         }),
         fc.integer().filter((n) => n !== 1),
@@ -1802,7 +1770,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.constant(1),
@@ -1836,7 +1804,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.constant(1),
@@ -1934,7 +1902,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.string(),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -1968,7 +1936,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.string(),
         fc.constantFrom(...btcAddresses),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -2002,7 +1970,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(...topicOptions),
         fc.constantFrom(...btcAddressesMalformed),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleMainnet);
         }),
         fc.integer({ min: 1, max: 12 }),
@@ -2036,7 +2004,7 @@ describe('Signature generation', () => {
       fc.asyncProperty(
         fc.constantFrom(...topicOptions),
         fc.constantFrom(...btcAddressesMalformed),
-        fc.integer().chain((rewardCycle) => {
+        fc.integer().chain(() => {
           return fc.constant(curCycleTestnet);
         }),
         fc.integer({ min: 1, max: 12 }),
