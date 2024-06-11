@@ -57,7 +57,6 @@ export const SigFormErrorMessages = {
     `The period for ${topic} signature should be 1.`,
   InvalidPoxAddress: (poxAddress: string) =>
     `Invalid PoX Address: ${poxAddress}.`,
-  InvalidTopic: (topic: string) => `Invalid Topic: ${topic}.`,
   MaxAmountTooBig: (maxAmount: number) =>
     `Max amount too big (${maxAmount} > ${Number.MAX_SAFE_INTEGER}).`,
   RewCycleGreaterThanCurrent: (currentRewardCycle: number) =>
