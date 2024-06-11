@@ -1,8 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import { validateParams, randomAuthId } from './utils/helpers';
+import {
+  validateParams,
+  randomAuthId,
+  methodToPox4Topic as methodToSigTopic,
+} from './utils/helpers';
 import { createSignature, createStackingClient } from './utils/signature';
 import dotenv from 'dotenv';
+import { Pox4SignatureTopic } from '@stacks/stacking';
 const app = express();
 const port = 8080;
 dotenv.config();
@@ -30,6 +35,13 @@ app.post('/get-signature', async (req, res) => {
   const signerPublicKey = process.env.SIGNER_PUB_KEY;
   const signerAddress = process.env.SIGNER_ADDRESS;
   const network = process.env.NETWORK;
+  const sigTopic: Pox4SignatureTopic | undefined = methodToSigTopic[topic];
+
+  if (!sigTopic) {
+    console.error('Invalid Signature Topic:', topic);
+    res.status(400).json({ message: `Invalid Signature Topic: ${topic}` });
+    return;
+  }
 
   if (!signerPrivateKey || !signerAddress || !network) {
     console.error(
@@ -55,7 +67,7 @@ app.post('/get-signature', async (req, res) => {
 
   const [valid, message] = await validateParams(
     poxAddress,
-    topic,
+    sigTopic,
     rewardCycle,
     maxAmount,
     period,
@@ -71,26 +83,31 @@ app.post('/get-signature', async (req, res) => {
 
   const signature = createSignature(
     stackingClient,
-    topic,
+    sigTopic,
     poxAddress,
     rewardCycle,
     period,
     signerPrivateKey,
-    maxAmount,
+    maxAmount * 1_000_000,
     authId
   );
 
   console.log(
     'Received data:',
-    rewardCycle,
-    poxAddress,
-    maxAmount,
-    period,
-    topic,
-    authId
+    `rewardCycle: ${rewardCycle}`,
+    `poxAddress ${poxAddress}`,
+    `maxAmount (in uSTX): ${maxAmount * 1_000_000}`,
+    `period: ${period}`,
+    `topic: ${sigTopic}`,
+    `authId: ${authId}`
   );
 
-  console.log('Signature:', signature);
+  console.log('sending response: ', {
+    signature,
+    signerPublicKey,
+    authId,
+    maxAmount,
+  });
 
   res.status(200).json({
     signature,

@@ -11,7 +11,7 @@ export const createStackingClient = (
   }
   const stacksNetwork =
     network?.toLowerCase() === 'testnet'
-      ? new StacksTestnet()
+      ? new StacksTestnet({ url: 'https://api.nakamoto.testnet.hiro.so' })
       : new StacksMainnet();
   return new StackingClient(address as string, stacksNetwork);
 };
@@ -23,7 +23,7 @@ export const createSignature = (
   rewardCycle: number,
   period: number,
   signerPrivateKey: string,
-  maxAmount: number,
+  maxAmountUSTX: number,
   authId: number
 ) => {
   return stackingClient.signPoxSignature({
@@ -32,7 +32,7 @@ export const createSignature = (
     rewardCycle,
     period,
     signerPrivateKey: createStacksPrivateKey(signerPrivateKey),
-    maxAmount,
+    maxAmount: maxAmountUSTX,
     authId,
   });
 };
