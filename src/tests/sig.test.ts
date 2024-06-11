@@ -28,14 +28,6 @@ const topicOptions = [
   'agg-increase',
 ];
 
-const TopicList: string[] = [
-  'stack-stx',
-  'stack-extend',
-  'stack-increase',
-  'stack-aggregation-commit',
-  'stack-aggregation-increase',
-];
-
 fc.configureGlobal({ numRuns: 5, endOnFailure: true });
 let stackingClientMainnet: StackingClient | undefined;
 let stackingClientTestnet: StackingClient | undefined;
@@ -506,7 +498,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -540,7 +532,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -574,7 +566,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -608,7 +600,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -642,7 +634,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -676,7 +668,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -710,7 +702,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -744,7 +736,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -776,7 +768,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -808,7 +800,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[0],
+            topicOptions[0] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -842,7 +834,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -876,7 +868,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -910,7 +902,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -944,7 +936,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -978,7 +970,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1012,7 +1004,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1046,7 +1038,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1080,7 +1072,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1112,7 +1104,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1144,7 +1136,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[1],
+            topicOptions[1] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1178,7 +1170,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1212,7 +1204,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1246,7 +1238,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1280,7 +1272,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1314,7 +1306,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1348,7 +1340,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1382,7 +1374,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1416,7 +1408,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1448,7 +1440,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1480,7 +1472,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[2],
+            topicOptions[2] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1514,7 +1506,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1524,7 +1516,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.AggCommitWrongPeriod(TopicList[3]),
+            SigFormErrorMessages.AggCommitWrongPeriod(topicOptions[3]),
           ]);
         }
       )
@@ -1548,7 +1540,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1558,7 +1550,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.AggCommitWrongPeriod(TopicList[3]),
+            SigFormErrorMessages.AggCommitWrongPeriod(topicOptions[3]),
           ]);
         }
       )
@@ -1582,7 +1574,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1616,7 +1608,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1648,7 +1640,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1680,7 +1672,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[3],
+            topicOptions[3] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1714,7 +1706,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1724,7 +1716,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.AggCommitWrongPeriod(TopicList[4]),
+            SigFormErrorMessages.AggCommitWrongPeriod(topicOptions[4]),
           ]);
         }
       )
@@ -1748,7 +1740,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1758,7 +1750,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.AggCommitWrongPeriod(TopicList[4]),
+            SigFormErrorMessages.AggCommitWrongPeriod(topicOptions[4]),
           ]);
         }
       )
@@ -1782,7 +1774,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1816,7 +1808,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1848,7 +1840,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1880,7 +1872,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            TopicList[4],
+            topicOptions[4] as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1914,7 +1906,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            topic,
+            topic as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1924,7 +1916,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.InvalidTopic(topic),
+            SigFormErrorMessages.WrongTopic,
           ]);
         }
       )
@@ -1948,7 +1940,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            topic,
+            topic as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -1958,7 +1950,7 @@ describe('Signature generation', () => {
           // Assert
           expect(message).toStrictEqual([
             false,
-            SigFormErrorMessages.InvalidTopic(topic),
+            SigFormErrorMessages.WrongTopic,
           ]);
         }
       )
@@ -1982,7 +1974,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            topic,
+            topic as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
@@ -2016,7 +2008,7 @@ describe('Signature generation', () => {
           // Act
           const message = await validateParams(
             poxAddress,
-            topic,
+            topic as Pox4SignatureTopic,
             rewardCycle,
             maxAmount,
             period,
