@@ -10,8 +10,10 @@ export const createStackingClient = (
     return undefined;
   }
   const stacksNetwork =
-    network?.toLowerCase() === 'testnet'
+    network?.toLowerCase() === 'nakamoto-testnet'
       ? new StacksTestnet({ url: 'https://api.nakamoto.testnet.hiro.so' })
+      : network?.toLowerCase() === 'testnet'
+      ? new StacksTestnet()
       : new StacksMainnet();
   return new StackingClient(address as string, stacksNetwork);
 };
