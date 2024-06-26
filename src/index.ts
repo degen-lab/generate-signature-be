@@ -8,6 +8,7 @@ import {
 import { createSignature, createStackingClient } from './utils/signature';
 import dotenv from 'dotenv';
 import { Pox4SignatureTopic } from '@stacks/stacking';
+import { MAX_ALLOWED_STX_AMOUNT } from './utils/constants';
 const app = express();
 const port = 8080;
 dotenv.config();
@@ -31,6 +32,17 @@ app.listen(port, () => {
 app.post('/get-signature', async (req, res) => {
   console.log(req.body);
   const { rewardCycle, poxAddress, maxAmount, period, topic } = req.body;
+
+  if (maxAmount > MAX_ALLOWED_STX_AMOUNT) {
+    console.error(
+      `The provided STX amount ${maxAmount} is greater than the maximum allowed amount ${MAX_ALLOWED_STX_AMOUNT}`
+    );
+    res.status(400).json({
+      message: `The provided STX amount ${maxAmount} is greater than the maximum allowed amount ${MAX_ALLOWED_STX_AMOUNT}`,
+    });
+    return;
+  }
+
   const signerPrivateKey = process.env.SIGNER_PRV_KEY;
   const signerPublicKey = process.env.SIGNER_PUB_KEY;
   const signerAddress = process.env.SIGNER_ADDRESS;
