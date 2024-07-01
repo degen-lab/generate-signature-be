@@ -13,7 +13,11 @@ const app = express();
 const port = 8080;
 dotenv.config();
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://generate-signature-fe.vercel.app',
+];
 app.use(
   cors({
     origin: allowedOrigins,
