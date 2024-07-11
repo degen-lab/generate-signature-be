@@ -9,20 +9,11 @@ import { createSignature, createStackingClient } from './utils/signature';
 import dotenv from 'dotenv';
 import { Pox4SignatureTopic } from '@stacks/stacking';
 import { MAX_ALLOWED_STX_AMOUNT } from './utils/constants';
+import BigNumber from 'bignumber.js';
 const app = express();
 const port = 8080;
 dotenv.config();
-
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'https://generate-signature-fe.vercel.app',
-];
-app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -48,10 +39,14 @@ app.post('/get-signature', async (req, res) => {
   }
 
   const signerPrivateKey = process.env.SIGNER_PRV_KEY;
-  const signerPublicKey = process.env.SIGNER_PUB_KEY;
+  const publicKey = process.env.SIGNER_PUB_KEY;
   const signerAddress = process.env.SIGNER_ADDRESS;
   const network = process.env.NETWORK;
   const sigTopic: Pox4SignatureTopic | undefined = methodToSigTopic[topic];
+  const maxAmountUSTX = new BigNumber(maxAmount)
+    .shiftedBy(6)
+    .decimalPlaces(0)
+    .toString(10);
 
   if (!sigTopic) {
     console.error('Invalid Signature Topic:', topic);
@@ -97,14 +92,14 @@ app.post('/get-signature', async (req, res) => {
     return;
   }
 
-  const signature = createSignature(
+  const signerSignature = createSignature(
     stackingClient,
     sigTopic,
     poxAddress,
     rewardCycle,
     period,
     signerPrivateKey,
-    maxAmount * 1_000_000,
+    maxAmountUSTX,
     authId
   );
 
@@ -112,23 +107,26 @@ app.post('/get-signature', async (req, res) => {
     'Received data:',
     `rewardCycle: ${rewardCycle}`,
     `poxAddress ${poxAddress}`,
-    `maxAmount (in uSTX): ${maxAmount * 1_000_000}`,
+    `maxAmount (in uSTX): ${maxAmountUSTX}`,
     `period: ${period}`,
     `topic: ${sigTopic}`,
     `authId: ${authId}`
   );
 
   console.log('sending response: ', {
-    signature,
-    signerPublicKey,
+    signature: signerSignature,
+    publicKey,
     authId,
-    maxAmount,
+    maxAmount: maxAmountUSTX,
   });
 
   res.status(200).json({
-    signature,
-    signerPublicKey,
+    method: sigTopic,
+    period,
+    rewardCycle,
+    signerSignature,
+    publicKey,
     authId,
-    maxAmount,
+    maxAmount: maxAmountUSTX,
   });
 });

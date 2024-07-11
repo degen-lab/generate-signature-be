@@ -10,7 +10,7 @@ export const methodToPox4Topic: Record<string, Pox4SignatureTopic> = {
 };
 
 export const randomAuthId = () => {
-  return Date.now();
+  return Date.now().toString();
 };
 
 export const validateParams = async (

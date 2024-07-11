@@ -25,8 +25,8 @@ export const createSignature = (
   rewardCycle: number,
   period: number,
   signerPrivateKey: string,
-  maxAmountUSTX: number,
-  authId: number
+  maxAmountUSTX: string,
+  authId: string
 ) => {
   return stackingClient.signPoxSignature({
     topic,
