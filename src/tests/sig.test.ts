@@ -94,7 +94,7 @@ describe('Signature generation', () => {
             rewardCycle,
             topic,
             period,
-            maxAmount,
+            maxAmount.toString(),
             authId,
             MAINNET_CHAIN_ID
           );
@@ -108,7 +108,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -140,7 +140,7 @@ describe('Signature generation', () => {
             rewardCycle,
             topic,
             period,
-            maxAmount,
+            maxAmount.toString(),
             authId,
             TESTNET_CHAIN_ID
           );
@@ -154,7 +154,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -187,7 +187,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -239,7 +239,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -292,7 +292,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -344,7 +344,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -397,7 +397,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -449,7 +449,7 @@ describe('Signature generation', () => {
             rewardCycle,
             period,
             prvKey,
-            maxAmount,
+            maxAmount.toString(),
             authId
           );
 
@@ -1828,12 +1828,11 @@ describe('Signature generation', () => {
   it('create agg-increase sig for mainnet, undefiend reward cycle', () => {
     fc.assert(
       fc.asyncProperty(
-        fc.constantFrom(topicOptions[4]),
         fc.constantFrom(...btcAddresses),
         fc.constant(undefined),
         fc.constant(1),
         fc.integer({ min: 0 }),
-        async (topic, poxAddress, rewardCycle, period, maxAmount) => {
+        async (poxAddress, rewardCycle, period, maxAmount) => {
           // Arrange
           expect(stackingClientMainnet).toBeDefined();
 

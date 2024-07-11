@@ -8,7 +8,6 @@ import {
 import { createSignature, createStackingClient } from './utils/signature';
 import dotenv from 'dotenv';
 import { Pox4SignatureTopic } from '@stacks/stacking';
-import { MAX_ALLOWED_STX_AMOUNT } from './utils/constants';
 import BigNumber from 'bignumber.js';
 const app = express();
 const port = 8080;
@@ -27,26 +26,26 @@ app.listen(port, () => {
 app.post('/get-signature', async (req, res) => {
   console.log(req.body);
   const { rewardCycle, poxAddress, maxAmount, period, topic } = req.body;
-
-  if (maxAmount > MAX_ALLOWED_STX_AMOUNT) {
+  let maxAmountUSTX;
+  try {
+    maxAmountUSTX = new BigNumber(maxAmount)
+      .shiftedBy(6)
+      .decimalPlaces(0)
+      .toString(10);
+  } catch (error) {
     console.error(
-      `The provided STX amount ${maxAmount} is greater than the maximum allowed amount ${MAX_ALLOWED_STX_AMOUNT}`
+      `The provided STX amount ${maxAmount} is not a valid number.`
     );
-    res.status(400).json({
-      message: `The provided STX amount ${maxAmount} is greater than the maximum allowed amount ${MAX_ALLOWED_STX_AMOUNT}`,
+    return res.status(400).json({
+      message: `The provided STX amount ${maxAmount} is not a valid number.`,
     });
-    return;
   }
 
   const signerPrivateKey = process.env.SIGNER_PRV_KEY;
-  const publicKey = process.env.SIGNER_PUB_KEY;
+  const signerKey = process.env.SIGNER_PUB_KEY;
   const signerAddress = process.env.SIGNER_ADDRESS;
   const network = process.env.NETWORK;
   const sigTopic: Pox4SignatureTopic | undefined = methodToSigTopic[topic];
-  const maxAmountUSTX = new BigNumber(maxAmount)
-    .shiftedBy(6)
-    .decimalPlaces(0)
-    .toString(10);
 
   if (!sigTopic) {
     console.error('Invalid Signature Topic:', topic);
@@ -114,8 +113,8 @@ app.post('/get-signature', async (req, res) => {
   );
 
   console.log('sending response: ', {
-    signature: signerSignature,
-    publicKey,
+    signerSignature,
+    signerKey,
     authId,
     maxAmount: maxAmountUSTX,
   });
@@ -125,8 +124,9 @@ app.post('/get-signature', async (req, res) => {
     period,
     rewardCycle,
     signerSignature,
-    publicKey,
+    signerKey,
     authId,
     maxAmount: maxAmountUSTX,
+    poxAddress,
   });
 });

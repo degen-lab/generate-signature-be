@@ -1,1 +1,0 @@
-export const MAX_ALLOWED_STX_AMOUNT: number = 9007199254.74;

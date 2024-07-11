@@ -29,8 +29,8 @@ const generateMessageHash = (
   reward_cycle: number,
   topic: string,
   period: number,
-  auth_id: number,
-  max_amount: number
+  auth_id: string,
+  max_amount: string
 ): ClarityValue =>
   Cl.tuple({
     'pox-addr': Cl.tuple({
@@ -55,8 +55,8 @@ export const buildSignerKeyMessageHash = (
   reward_cycle: number,
   topic: string,
   period: number,
-  max_amount: number,
-  auth_id: number,
+  max_amount: string,
+  auth_id: string,
   chainId: number
 ) => {
   const domain_hash = structuredDataHash(generateDomainHash(chainId));
@@ -137,8 +137,8 @@ export const createSignatureTest = (
   rewardCycle: number,
   period: number,
   signerPrivateKey: string,
-  maxAmount: number,
-  authId: number
+  maxAmount: string,
+  authId: string
 ) => {
   return stackingClient.signPoxSignature({
     topic,
