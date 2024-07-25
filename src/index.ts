@@ -4,6 +4,7 @@ import {
   validateParams,
   randomAuthId,
   methodToPox4Topic as methodToSigTopic,
+  validateNetwork,
 } from './utils/helpers';
 import { createSignature, createStackingClient } from './utils/signature';
 import dotenv from 'dotenv';
@@ -25,7 +26,8 @@ app.listen(port, () => {
 
 app.post('/get-signature', async (req, res) => {
   console.log(req.body);
-  const { rewardCycle, poxAddress, maxAmount, period, topic } = req.body;
+  const { rewardCycle, poxAddress, maxAmount, period, topic, network } =
+    req.body;
   let maxAmountUSTX;
   try {
     maxAmountUSTX = new BigNumber(maxAmount)
@@ -41,10 +43,27 @@ app.post('/get-signature', async (req, res) => {
     });
   }
 
-  const signerPrivateKey = process.env.SIGNER_PRV_KEY;
-  const signerKey = process.env.SIGNER_PUB_KEY;
-  const signerAddress = process.env.SIGNER_ADDRESS;
-  const network = process.env.NETWORK;
+  const [validNetwork, messageNetwork] = validateNetwork(network);
+
+  console.log('\n\n', validNetwork, messageNetwork, '\n\n');
+
+  if (!validNetwork) {
+    res.status(400).json({ messageNetwork });
+    return;
+  }
+
+  const [signerPrivateKey, signerKey, signerAddress] =
+    network === 'mainnet'
+      ? [
+          process.env.MAINNET_SIGNER_PRV_KEY,
+          process.env.MAINNET_SIGNER_PUB_KEY,
+          process.env.MAINNET_SIGNER_ADDRESS,
+        ]
+      : [
+          process.env.TESTNET_SIGNER_PRV_KEY,
+          process.env.TESTNET_SIGNER_PUB_KEY,
+          process.env.TESTNET_SIGNER_ADDRESS,
+        ];
   const sigTopic: Pox4SignatureTopic | undefined = methodToSigTopic[topic];
 
   if (!sigTopic) {
@@ -53,22 +72,14 @@ app.post('/get-signature', async (req, res) => {
     return;
   }
 
-  if (!signerPrivateKey || !signerAddress || !network) {
-    console.error(
-      'Invalid Signer Data:',
-      signerPrivateKey,
-      signerAddress,
-      network
-    );
+  if (!signerPrivateKey || !signerAddress) {
+    console.error('Invalid Signer Data:', signerPrivateKey, signerAddress);
     res.status(400).json({ message: 'Invalid Signer Data' });
     return;
   }
 
   const authId = randomAuthId();
-  const stackingClient = createStackingClient(
-    process.env.SIGNER_ADDRESS,
-    process.env.NETWORK
-  );
+  const stackingClient = createStackingClient(signerAddress, network);
 
   if (!stackingClient) {
     res.status(400).json({ message: 'Invalid Internal Info' });

@@ -29,6 +29,9 @@ export const validateParams = async (
   if (maxAmount > Number.MAX_SAFE_INTEGER)
     return [false, SigFormErrorMessages.MaxAmountTooBig(maxAmount)];
 
+  if (isNaN(maxAmount))
+    return [false, SigFormErrorMessages.MaxAmountNotANumber];
+
   const [rewardCycleValid, rewardCycleMessage] = testRewardCycle(
     topic,
     currentRewardCycle,
@@ -42,6 +45,17 @@ export const validateParams = async (
   if (!periodValid) return [false, periodMessage];
 
   return [true, 'OK'];
+};
+
+export const validateNetwork = (network: string) => {
+  if (
+    network === 'mainnet' ||
+    network === 'testnet' ||
+    network === 'nakamoto-testnet'
+  )
+    return [true, 'OK'];
+
+  return [false, SigFormErrorMessages.InvalidNetwork(network)];
 };
 
 export const SigFormErrorMessages = {
@@ -59,8 +73,11 @@ export const SigFormErrorMessages = {
     `Invalid PoX Address: ${poxAddress}.`,
   MaxAmountTooBig: (maxAmount: number) =>
     `Max amount too big (${maxAmount} > ${Number.MAX_SAFE_INTEGER}).`,
+  MaxAmountNotANumber: 'Max amount must be a number.',
   RewCycleGreaterThanCurrent: (currentRewardCycle: number) =>
     `The reward cycle is greater than the current one (${currentRewardCycle}).`,
+  InvalidNetwork: (network: string) =>
+    `Invalid network: ${network}. Possible options: 'mainnet', 'testnet', 'nakamoto-testnet'.`,
 };
 
 /**
